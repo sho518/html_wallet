@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <title>My Ethereum Wallet</title>
+    <style>
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container" role="main">
+        <h2><strong>My Ethereum Wallet</strong></h2>
+        <button id="newAccount">Create New Account</button>
+        <h5>Address: <input id="fromaddress" size="45" placeholder="Generated account address" readonly></input></h5>
+        <h5>Mnemonic: <span id="mnemonic"></span></h5>
+        <a href="transfer.html">Transfer</a>
+    </div>
+
+    <hr>
+    <footer class="py-5 bg-dark">
+        <div class="container">
+            <p class="m-0 text-center text-white"><b>Since 2022-2023</b></p>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="./js/bip39-web.js"></script>
+    <script src="./js/web3.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            const web3 = new Web3('https://sepolia.infura.io/v3/be5b3b96d60e47ea926d52e0d99264e7');
+			
+			$('#newAccount').click(function() {
+                const mnemonic = bip39.default.generateMnemonic();
+                const seed = bip39.default.mnemonicToSeedSync(mnemonic);
+                const wallet = web3.eth.accounts.wallet.create(1, seed.toString('hex'));
+                const account = wallet[0];
+
+                localStorage.setItem('accountAddress', account.address);
+                localStorage.setItem('accountPrivateKey', account.privateKey);
+                localStorage.setItem('mnemonic', mnemonic);
+
+                $('#fromaddress').val(account.address);
+                $('#mnemonic').text(mnemonic);
+                alert(`Your account has been created!\nAccount: ${account.address}\nPrivateKey: ${account.privateKey}`);
+            });
+        });
+    </script>
+</body>
+
+</html>
