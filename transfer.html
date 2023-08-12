@@ -85,6 +85,7 @@
 		
 		</div>
 		<button id="cameronoff">QRscan on/off</button>
+		<button id="switchCameraButton">Switch Camera</button> <!-- 카메라 전환 버튼 추가 -->
     </div>
 	
     <script>
@@ -264,6 +265,52 @@
 			$('#cameronoff').on('click', function () {
 				toggleCamera();
 			});
+			
+			let currentDeviceId = '';
+			        // 사용 가능한 카메라 장치를 가져옵니다.
+			function getCameras() {
+				return navigator.mediaDevices.enumerateDevices()
+					.then(devices => devices.filter(device => device.kind === 'videoinput'))
+					.catch(error => console.error('Error enumerating devices:', error));
+			}
+
+			// 카메라를 전환합니다.
+			function switchCamera() {
+				getCameras().then(cameras => {
+					if (cameras.length === 0) {
+						console.error('No cameras found.');
+						return;
+					}
+
+					let nextIndex = cameras.findIndex(camera => camera.deviceId === currentDeviceId) + 1;
+					if (nextIndex >= cameras.length) {
+						nextIndex = 0; // 처음 카메라로 돌아갑니다.
+					}
+
+					const nextDevice = cameras[nextIndex];
+					currentDeviceId = nextDevice.deviceId;
+
+					// 새 카메라로 스트림을 업데이트합니다.
+					navigator.mediaDevices.getUserMedia({ video: { deviceId: currentDeviceId } })
+						.then(stream => {
+							video.srcObject = stream;
+							video.play();
+						})
+						.catch(error => console.error('Error accessing camera:', error));
+				});
+			}
+
+			// 시작할 때 사용 가능한 카메라 목록을 가져옵니다.
+			getCameras().then(cameras => {
+				if (cameras.length > 0) {
+					currentDeviceId = cameras[0].deviceId;
+				}
+			});
+
+			// 카메라 전환 버튼에 이벤트 리스너를 추가합니다.
+			document.getElementById('switchCameraButton').addEventListener('click', switchCamera);
+
+			
 		})
 
     </script>
