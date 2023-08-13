@@ -8,28 +8,93 @@
 	<script src="./js/jsQR.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script type="text/javascript" src="./js/web3.min.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
     <title>입금</title>
     <style>
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
+        /* Color Palette */
+        :root {
+            --primary-color: #6c5ce7;
+            --secondary-color: #a29bfe;
+            --gradient-start: #6c5ce7;
+            --gradient-end: #a29bfe;
+            --btn-shadow: rgba(108, 92, 231, 0.4);
+            --input-border: #dfe6e9;
+            --input-focus-border: #b2bec3;
         }
 
-        /* 추가할 스타일 */
-        .navigation {
-            text-align: center;
-            margin: 20px 0;
-        }
+		/* General Styles for Mobile */
+		body {
+			font-family: 'Arial', sans-serif;
+			background-color: #f4f4f4;
+		}
 
-        .navigation a {
-            margin: 0 15px;
-            text-decoration: none;
-            color: #333;
-        }
+		.container {
+			background-color: #ffffff;
+			border-radius: 8px;
+			box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+			overflow: hidden;
+			padding: 15px;
+		}
 
-        .navigation a:hover {
-            text-decoration: underline;
-        }
+		h2, h3, h5 {
+			margin-top: 15px;
+			color: var(--primary-color);
+		}
+
+		/* Buttons for Mobile */
+		button {
+			background-image: linear-gradient(45deg, var(--gradient-start), var(--gradient-end));
+			border: none;
+			color: #ffffff;
+			border-radius: 25px;
+			cursor: pointer;
+			transition: transform 0.2s, box-shadow 0.2s;
+			box-shadow: 0 5px 15px var(--btn-shadow);
+		}
+
+		button:hover {
+			transform: translateY(-3px);
+			box-shadow: 0 7px 20px var(--btn-shadow);
+		}
+		
+		
+		/* Responsive Design */
+		@media (min-width: 768px) {
+			body {
+				font-size: 18px;
+			}
+
+			.container {
+				padding: 20px;
+			}
+
+			h2, h3, h5 {
+				margin-top: 20px;
+			}
+
+			button {
+				padding: 10px 20px;
+				font-size: 18px;
+			}
+
+			input, textarea {
+				padding: 10px;
+				font-size: 18px;
+			}
+		}
+
+		/* Additional styling for navigation */
+		.navigation a {
+			background-color: var(--secondary-color);
+			padding: 10px 15px;
+			border-radius: 25px;
+			transition: background-color 0.2s;
+		}
+
+		.navigation a:hover {
+			background-color: var(--primary-color);
+		}
+		
     </style>
 </head>
 <body>
@@ -46,7 +111,12 @@
 		<h5>Balance: <span id="balance">0</span> ETH</h5>  <!-- 잔액을 표시할 부분 -->
 		<div id="qrcode"></div>
 	</div>
-
+    <hr>
+    <footer class="py-5 bg-dark">
+        <div class="container">
+            <p class="m-0 text-center text-white"><b>Since 2022-2023</b></p>
+        </div>
+    </footer>
 
 
     <script>
