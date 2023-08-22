@@ -156,16 +156,20 @@
 			$('#newAccount').click(function() {
 				const mnemonic = bip39.default.generateMnemonic();
 				const seed = bip39.default.mnemonicToSeedSync(mnemonic);
-				const wallet = web3.eth.accounts.wallet.create(1, seed.toString('hex'));
-				const account = wallet[0];
+				const hdWallet = EthereumJsWallet.hdkey.fromMasterSeed(seed);
+				const derivePath = "m/44'/60'/0'/0/0"; // BIP44 Ethereum path
+				const walletHDPath = hdWallet.derivePath(derivePath);
+				const wallet = walletHDPath.getWallet();
 				
-				localStorage.setItem('accountAddress', account.address);
-				localStorage.setItem('accountPrivateKey', account.privateKey);
+				const address = wallet.getAddressString(); // Ethereum 주소 추출
+
+				localStorage.setItem('accountAddress', address);
+				localStorage.setItem('accountPrivateKey', wallet.getPrivateKeyString());
 				localStorage.setItem('mnemonic', mnemonic);
 
-				$('#fromaddress').val(account.address);
+				$('#fromaddress').val(address);
 				$('#mnemonic').text(mnemonic);
-				alert(`Your account has been created!\nAccount: ${account.address}\nPrivateKey: ${account.privateKey}`);
+				alert(`Your account has been created!\nAccount: ${address}\nPrivateKey: ${wallet.getPrivateKeyString()}`);
 			});
 
 			$('#recoverAccount').click(function() {
